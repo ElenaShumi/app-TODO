@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { formatDistanceToNow } from 'date-fns';
+import PropTypes from 'prop-types';
 
 import './task.css';
 
@@ -9,7 +10,19 @@ export default class Task extends Component {
         label: '',
         date: new Date(),
         completed: false
-    }
+    };
+
+    static propTypes = {
+        todos: PropTypes.arrayOf(PropTypes.object),
+        id: PropTypes.number,
+        label: PropTypes.string,
+        onDeleted: PropTypes.func.isRequired,
+        onToggleCompleted: PropTypes.func.isRequired,
+        onItemEditing: PropTypes.func.isRequired,
+        completed: PropTypes.bool,
+        editing: PropTypes.bool,
+        date: PropTypes.instanceOf(Date)
+    };
 
     state = {
         label: '',

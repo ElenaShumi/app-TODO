@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 
 import './newTaskForm.css';
 
@@ -7,6 +8,11 @@ export default class NewTaskForm extends Component {
     state = {
         label: ''
     };
+
+    static propTypes = {
+        label: PropTypes.string
+    };
+
 
     onLabelChange = (e) => {
         this.setState({

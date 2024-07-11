@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 
 import './app.css';
 
@@ -12,6 +13,14 @@ export default class App extends Component {
 
     static defaultProps = {
         todoData: []
+    }
+
+    static propTypes = {
+        todoData: PropTypes.arrayOf(PropTypes.object),
+        id: PropTypes.number,
+        label: PropTypes.string,
+        todoCount: PropTypes.number,
+        createTodoItem: PropTypes.func
     }
 
     state = {
