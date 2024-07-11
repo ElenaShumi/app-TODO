@@ -19,4 +19,9 @@ const Footer = ( {itemsLeft, filter, onFilterChange, onClearCompleted} ) => {
     );
 };
 
+Footer.defaultProps = {
+    itemsLeft: 0,
+    filter: 'all'
+}
+
 export default Footer;

@@ -8,7 +8,11 @@ import Footer from "../footer";
 
 export default class App extends Component {
     
-    maxId = 100;
+    maxId = 1;
+
+    static defaultProps = {
+        todoData: []
+    }
 
     state = {
         todoData: [
@@ -68,7 +72,6 @@ export default class App extends Component {
             };
         });
     };
-
 
     filter(items, filter) {
         switch(filter) {
@@ -139,8 +142,8 @@ export default class App extends Component {
                         onClearCompleted={this.clearCompleted} />
                 </section>
             </section>
-        )
-    }
-}
+        );
+    };
+};
 
 

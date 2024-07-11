@@ -5,6 +5,12 @@ import './task.css';
 
 export default class Task extends Component {
 
+    static defaultProps = {
+        label: '',
+        date: new Date(),
+        completed: false
+    }
+
     state = {
         label: '',
         editing: false
@@ -30,7 +36,7 @@ export default class Task extends Component {
     };
 
     onToggleEditing = () => {
-        this.setState(({ editing, label }) => {
+        this.setState(({ editing }) => {
             return {
                 editing: !editing,
                 label: this.props.label

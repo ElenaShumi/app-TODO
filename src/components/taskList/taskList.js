@@ -5,6 +5,9 @@ import './taskList.css';
 
 export default class TaskList extends Component {
 
+    static defaultProps = {
+        todos: []
+    }
 
     render() {
         const { todos, onDeleted, onToggleCompleted, onItemEditing } = this.props;

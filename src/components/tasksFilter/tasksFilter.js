@@ -5,8 +5,7 @@ import './tasksFilter.css'
 export default class TasksFilter extends Component {
 
     static defaultProps = {
-        filter: () => {},
-        
+        filter: 'all'
     }
 
     buttons = [
