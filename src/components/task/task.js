@@ -14,6 +14,8 @@ export default class Task extends Component {
   static propTypes = {
     todos: PropTypes.arrayOf(PropTypes.object),
     id: PropTypes.number,
+    minutes: PropTypes.number,
+    seconds: PropTypes.number,
     label: PropTypes.string,
     onDeleted: PropTypes.func.isRequired,
     onToggleCompleted: PropTypes.func.isRequired,
