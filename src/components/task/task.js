@@ -26,12 +26,19 @@ export default class Task extends Component {
   state = {
     label: '',
     editing: false,
+    minutes: '00',
+    seconds: null,
+    timer: null,
   }
 
   onLabelChange = (e) => {
     this.setState({
       label: e.target.value,
     })
+  }
+
+  componentDidMount() {
+    this.onTime(this.props.minutes, this.props.seconds)
   }
 
   onSubmit = (e) => {
@@ -55,17 +62,66 @@ export default class Task extends Component {
     })
   }
 
+  onTime = (minutes, seconds) => {
+    this.setState({
+      minutes,
+      seconds,
+    })
+  }
+
+  // startTimer = () => {
+  //   const { minutes, seconds } = this.state
+  //   let secLeft
+  //   let timer = setInterval(() => {
+  //     if (seconds !== 0) {
+  //       let secLeft = seconds - 1
+  //     } else if (seconds === 0 && minutes !== 0) {
+  //       let minLeft = minutes - 1
+  //     }
+  //     this.setState({
+  //       seconds: secLeft,
+  //     })
+  //     if (seconds === 0 && minutes === 0) {
+  //       clearInterval(timer)
+  //     }
+  //   }, 1000)
+  //   this.setState({
+  //     minutes: minLeft,
+  //     seconds: '59',
+  //   })
+  // }
+
+  // startTimer = (timeLeft) => {
+  //   clearInterval(this.state.timer)
+  //   let timer = setInterval(() => {
+  //     var timeLeft = this.state.seconds - 1
+  //     if (timeLeft === 0) {
+  //       clearInterval(timer)
+  //     }
+  //     this.setState({
+  //       seconds: timeLeft,
+  //     })
+  //   }, 1000)
+  //   return this.setState({ seconds: timeLeft, timer: timer })
+  // }
+
   render() {
     const { label, id, onDeleted, onToggleCompleted, completed, date } = this.props
-    const { editing } = this.state
-
+    const { editing, minutes, seconds } = this.state
+    // console.log('56' - 1)
+    // console.log(seconds + 'S')
     return (
       <li className={completed ? 'completed' : editing ? 'editing' : ''}>
         <div className="view">
           <input className="toggle" type="checkbox" onClick={onToggleCompleted} id={`checkbox ${id}`} />
           <label htmlFor={`checkbox ${id}`}>
-            <span className="description"> {label} </span>
-            <span className="created">{`created ${formatDistanceToNow(date, { includeSeconds: true })}`}</span>
+            <span className="title"> {label} </span>
+            <span className="description">
+              <button className="icon icon-play" onClick={this.startTimer}></button>
+              <button className="icon icon-pause"></button>
+              {`${minutes}:${seconds}`}
+            </span>
+            <span className="description">{`created ${formatDistanceToNow(date, { includeSeconds: true })}`}</span>
           </label>
           <button className="icon icon-edit" onClick={this.onToggleEditing}></button>
           <button className="icon icon-destroy" onClick={onDeleted}></button>

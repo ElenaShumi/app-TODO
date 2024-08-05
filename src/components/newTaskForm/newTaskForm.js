@@ -6,11 +6,18 @@ import './newTaskForm.css'
 export default class NewTaskForm extends Component {
   state = {
     label: '',
+    minutes: '',
+    seconds: '',
   }
 
   static propTypes = {
     label: PropTypes.string,
   }
+
+  // static defaultProps = {
+  //   minutes: '00',
+  //   seconds: '00',
+  // }
 
   onLabelChange = (e) => {
     this.setState({
@@ -18,17 +25,32 @@ export default class NewTaskForm extends Component {
     })
   }
 
+  onMinutesChange = (e) => {
+    this.setState({
+      minutes: e.target.value,
+    })
+  }
+
+  onSecondsChange = (e) => {
+    this.setState({
+      seconds: e.target.value,
+    })
+  }
+
   onSubmit = (e) => {
+    const { label, minutes, seconds } = this.state
     e.preventDefault()
-    this.props.onItemAdded(this.state.label)
+    this.props.onItemAdded(label, minutes, seconds)
     this.setState({
       label: '',
+      minutes: '',
+      seconds: '',
     })
   }
 
   render() {
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} className="new-todo-form">
         <input
           type="text"
           className="new-todo"
@@ -37,6 +59,23 @@ export default class NewTaskForm extends Component {
           value={this.state.label}
           autoFocus
         />
+        <input
+          type="number"
+          className="new-todo-form__timer"
+          placeholder="Min"
+          autoFocus
+          value={this.state.minutes}
+          onChange={this.onMinutesChange}
+        />
+        <input
+          type="number"
+          className="new-todo-form__timer"
+          placeholder="Sec"
+          autoFocus
+          value={this.state.seconds}
+          onChange={this.onSecondsChange}
+        />
+        <button type="submit"></button>
       </form>
     )
   }
