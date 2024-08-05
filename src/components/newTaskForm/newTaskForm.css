@@ -37,3 +37,13 @@
 	width: 15%;
 	padding-left: 16px;
 }
+
+.new-todo-form input::-webkit-outer-spin-button,
+.new-todo-form input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.new-todo-form input[type="number"] {
+	-moz-appearance: textfield;
+}

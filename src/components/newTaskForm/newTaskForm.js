@@ -14,11 +14,6 @@ export default class NewTaskForm extends Component {
     label: PropTypes.string,
   }
 
-  // static defaultProps = {
-  //   minutes: '00',
-  //   seconds: '00',
-  // }
-
   onLabelChange = (e) => {
     this.setState({
       label: e.target.value,
@@ -61,6 +56,7 @@ export default class NewTaskForm extends Component {
         />
         <input
           type="number"
+          min="0"
           className="new-todo-form__timer"
           placeholder="Min"
           autoFocus
@@ -69,6 +65,8 @@ export default class NewTaskForm extends Component {
         />
         <input
           type="number"
+          min="0"
+          max="59"
           className="new-todo-form__timer"
           placeholder="Sec"
           autoFocus

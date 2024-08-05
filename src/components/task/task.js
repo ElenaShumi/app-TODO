@@ -26,9 +26,8 @@ export default class Task extends Component {
   state = {
     label: '',
     editing: false,
-    minutes: '00',
+    minutes: null,
     seconds: null,
-    timer: null,
   }
 
   onLabelChange = (e) => {
@@ -69,47 +68,36 @@ export default class Task extends Component {
     })
   }
 
-  // startTimer = () => {
-  //   const { minutes, seconds } = this.state
-  //   let secLeft
-  //   let timer = setInterval(() => {
-  //     if (seconds !== 0) {
-  //       let secLeft = seconds - 1
-  //     } else if (seconds === 0 && minutes !== 0) {
-  //       let minLeft = minutes - 1
-  //     }
-  //     this.setState({
-  //       seconds: secLeft,
-  //     })
-  //     if (seconds === 0 && minutes === 0) {
-  //       clearInterval(timer)
-  //     }
-  //   }, 1000)
-  //   this.setState({
-  //     minutes: minLeft,
-  //     seconds: '59',
-  //   })
-  // }
+  #interval
+  startTimer = () => {
+    const { minutes, seconds } = this.state
+    const end = Date.now() + minutes * 1000 * 60 + seconds * 1000
+    this.#interval = setInterval(() => {
+      const now = Date.now()
+      const delta = end - now
+      if (delta < 0) {
+        clearInterval(this.#interval)
+        return
+      }
+      this.setState({
+        minutes: Math.floor(delta / 1000 / 60),
+        seconds: Math.floor((delta % 60000) / 1000),
+      })
+    }, 500)
+  }
 
-  // startTimer = (timeLeft) => {
-  //   clearInterval(this.state.timer)
-  //   let timer = setInterval(() => {
-  //     var timeLeft = this.state.seconds - 1
-  //     if (timeLeft === 0) {
-  //       clearInterval(timer)
-  //     }
-  //     this.setState({
-  //       seconds: timeLeft,
-  //     })
-  //   }, 1000)
-  //   return this.setState({ seconds: timeLeft, timer: timer })
-  // }
+  pauseTimer = () => {
+    clearInterval(this.#interval)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.#interval)
+  }
 
   render() {
     const { label, id, onDeleted, onToggleCompleted, completed, date } = this.props
     const { editing, minutes, seconds } = this.state
-    // console.log('56' - 1)
-    // console.log(seconds + 'S')
+
     return (
       <li className={completed ? 'completed' : editing ? 'editing' : ''}>
         <div className="view">
@@ -118,8 +106,8 @@ export default class Task extends Component {
             <span className="title"> {label} </span>
             <span className="description">
               <button className="icon icon-play" onClick={this.startTimer}></button>
-              <button className="icon icon-pause"></button>
-              {`${minutes}:${seconds}`}
+              <button className="icon icon-pause" onClick={this.pauseTimer}></button>
+              {` ${minutes ? minutes : '00'}:${seconds ? seconds : '00'} `}
             </span>
             <span className="description">{`created ${formatDistanceToNow(date, { includeSeconds: true })}`}</span>
           </label>
