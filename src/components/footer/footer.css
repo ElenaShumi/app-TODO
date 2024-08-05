@@ -45,3 +45,9 @@ html .clear-completed:active {
 .clear-completed:hover {
 	text-decoration: underline;
 }
+
+@media (max-width: 430px) {
+	.footer {
+		height: 50px;
+	}
+}

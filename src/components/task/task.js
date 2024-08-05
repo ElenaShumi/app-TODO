@@ -14,6 +14,8 @@ export default class Task extends Component {
   static propTypes = {
     todos: PropTypes.arrayOf(PropTypes.object),
     id: PropTypes.number,
+    minutes: PropTypes.number,
+    seconds: PropTypes.number,
     label: PropTypes.string,
     onDeleted: PropTypes.func.isRequired,
     onToggleCompleted: PropTypes.func.isRequired,
@@ -26,12 +28,18 @@ export default class Task extends Component {
   state = {
     label: '',
     editing: false,
+    minutes: null,
+    seconds: null,
   }
 
   onLabelChange = (e) => {
     this.setState({
       label: e.target.value,
     })
+  }
+
+  componentDidMount() {
+    this.onTime(this.props.minutes, this.props.seconds)
   }
 
   onSubmit = (e) => {
@@ -55,17 +63,55 @@ export default class Task extends Component {
     })
   }
 
+  onTime = (minutes, seconds) => {
+    this.setState({
+      minutes,
+      seconds,
+    })
+  }
+
+  #interval
+  startTimer = () => {
+    const { minutes, seconds } = this.state
+    const end = Date.now() + minutes * 1000 * 60 + seconds * 1000
+    this.#interval = setInterval(() => {
+      const now = Date.now()
+      const delta = end - now
+      if (delta < 0) {
+        clearInterval(this.#interval)
+        return
+      }
+      this.setState({
+        minutes: Math.floor(delta / 1000 / 60),
+        seconds: Math.floor((delta % 60000) / 1000),
+      })
+    }, 500)
+  }
+
+  pauseTimer = () => {
+    clearInterval(this.#interval)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.#interval)
+  }
+
   render() {
     const { label, id, onDeleted, onToggleCompleted, completed, date } = this.props
-    const { editing } = this.state
+    const { editing, minutes, seconds } = this.state
 
     return (
       <li className={completed ? 'completed' : editing ? 'editing' : ''}>
         <div className="view">
           <input className="toggle" type="checkbox" onClick={onToggleCompleted} id={`checkbox ${id}`} />
           <label htmlFor={`checkbox ${id}`}>
-            <span className="description"> {label} </span>
-            <span className="created">{`created ${formatDistanceToNow(date, { includeSeconds: true })}`}</span>
+            <span className="title"> {label} </span>
+            <span className="description">
+              <button className="icon icon-play" onClick={this.startTimer}></button>
+              <button className="icon icon-pause" onClick={this.pauseTimer}></button>
+              {` ${minutes ? minutes : '00'}:${seconds ? seconds : '00'} `}
+            </span>
+            <span className="description">{`created ${formatDistanceToNow(date, { includeSeconds: true })}`}</span>
           </label>
           <button className="icon icon-edit" onClick={this.onToggleEditing}></button>
           <button className="icon icon-destroy" onClick={onDeleted}></button>

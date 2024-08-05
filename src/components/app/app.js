@@ -23,17 +23,15 @@ export default class App extends Component {
   }
 
   state = {
-    todoData: [
-      this.createTodoItem('Drink Coffee'),
-      this.createTodoItem('Make Awesome App'),
-      this.createTodoItem('Have a lunch'),
-    ],
+    todoData: [],
     filter: 'all',
   }
 
-  createTodoItem(label) {
+  createTodoItem(label, minutes, seconds) {
     return {
       label,
+      minutes,
+      seconds,
       completed: false,
       date: new Date(),
       id: this.maxId++,
@@ -52,8 +50,8 @@ export default class App extends Component {
     })
   }
 
-  addItem = (text) => {
-    const newItem = this.createTodoItem(text)
+  addItem = (text, minutes, seconds) => {
+    const newItem = this.createTodoItem(text, minutes, seconds)
 
     this.setState(({ todoData }) => {
       const newArray = [...todoData, newItem]
