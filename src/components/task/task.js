@@ -107,12 +107,16 @@ export default class Task extends Component {
     const { label, id, onDeleted, onToggleCompleted, completed, date } = this.props
     const { editing, minutes, seconds } = this.state
 
-    // if (!minutes) return '00'
-    // else if (minutes < 10) return `0${minutes}`
+    const inputCheckbox = completed ? (
+      <input className="toggle" type="checkbox" onClick={onToggleCompleted} id={`checkbox ${id}`} checked />
+    ) : (
+      <input className="toggle" type="checkbox" onClick={onToggleCompleted} id={`checkbox ${id}`} />
+    )
+
     return (
       <li className={completed ? 'completed' : editing ? 'editing' : ''}>
         <div className="view">
-          <input className="toggle" type="checkbox" onClick={onToggleCompleted} id={`checkbox ${id}`} />
+          {inputCheckbox}
           <label htmlFor={`checkbox ${id}`}>
             <span className="title"> {label} </span>
             <span className="description">
