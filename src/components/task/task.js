@@ -97,10 +97,18 @@ export default class Task extends Component {
     clearInterval(this.#interval)
   }
 
+  timeFormatting(time) {
+    if (!time) return '00'
+    else if (time < 10) return `0${time}`
+    else return time
+  }
+
   render() {
     const { label, id, onDeleted, onToggleCompleted, completed, date } = this.props
     const { editing, minutes, seconds } = this.state
 
+    // if (!minutes) return '00'
+    // else if (minutes < 10) return `0${minutes}`
     return (
       <li className={completed ? 'completed' : editing ? 'editing' : ''}>
         <div className="view">
@@ -110,7 +118,7 @@ export default class Task extends Component {
             <span className="description">
               <button className="icon icon-play" onClick={this.startTimer}></button>
               <button className="icon icon-pause" onClick={this.pauseTimer}></button>
-              {` ${minutes ? minutes : '00'}:${seconds ? seconds : '00'} `}
+              {` ${this.timeFormatting(minutes)}:${this.timeFormatting(seconds)} `}
             </span>
             <span className="description">{`created ${formatDistanceToNow(date, { includeSeconds: true })}`}</span>
           </label>
