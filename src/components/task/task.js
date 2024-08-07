@@ -72,6 +72,7 @@ export default class Task extends Component {
 
   #interval
   startTimer = () => {
+    clearInterval(this.#interval)
     const { minutes, seconds } = this.state
     const end = Date.now() + minutes * 1000 * 60 + seconds * 1000
     this.#interval = setInterval(() => {

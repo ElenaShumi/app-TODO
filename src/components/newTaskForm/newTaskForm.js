@@ -16,7 +16,7 @@ export default class NewTaskForm extends Component {
 
   onLabelChange = (e) => {
     this.setState({
-      label: e.target.value,
+      label: e.target.value.trimLeft(),
     })
   }
 
@@ -47,6 +47,7 @@ export default class NewTaskForm extends Component {
     return (
       <form onSubmit={this.onSubmit} className="new-todo-form">
         <input
+          required
           type="text"
           className="new-todo"
           onChange={this.onLabelChange}
