@@ -17,7 +17,7 @@ export default class TaskList extends Component {
   }
 
   render() {
-    const { todos, onDeleted, onToggleCompleted, onItemEditing } = this.props
+    const { todos, onDeleted, onToggleCompleted, onItemEditing, onToggleTimer, onToggleEndTimer } = this.props
 
     const elements = todos.map((item) => {
       const { id } = item
@@ -28,7 +28,9 @@ export default class TaskList extends Component {
           {...item}
           onDeleted={() => onDeleted(id)}
           onToggleCompleted={() => onToggleCompleted(id)}
+          onToggleTimer={onToggleTimer}
           onItemEditing={onItemEditing}
+          onToggleEndTimer={onToggleEndTimer}
         />
       )
     })

@@ -32,6 +32,8 @@ export default class App extends Component {
       label,
       minutes,
       seconds,
+      timer: false,
+      endTimer: null,
       completed: false,
       date: new Date(),
       id: this.maxId++,
@@ -75,6 +77,40 @@ export default class App extends Component {
     this.setState(({ todoData }) => {
       return {
         todoData: this.toggleProperty(todoData, id, 'completed'),
+      }
+    })
+  }
+
+  toggleTimer(arr, id, value) {
+    const idx = arr.findIndex((el) => el.id === id)
+
+    const oldItem = arr[idx]
+    const newItem = { ...oldItem, ['timer']: value }
+
+    return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)]
+  }
+
+  onToggleTimer = (id, value) => {
+    this.setState(({ todoData }) => {
+      return {
+        todoData: this.toggleTimer(todoData, id, value),
+      }
+    })
+  }
+
+  toggleEndTimer(arr, id, value) {
+    const idx = arr.findIndex((el) => el.id === id)
+
+    const oldItem = arr[idx]
+    const newItem = { ...oldItem, ['endTimer']: value }
+
+    return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)]
+  }
+
+  onToggleEndTimer = (id, value) => {
+    this.setState(({ todoData }) => {
+      return {
+        todoData: this.toggleEndTimer(todoData, id, value),
       }
     })
   }
@@ -127,7 +163,6 @@ export default class App extends Component {
     const completedCount = todoData.filter((el) => el.completed).length
 
     const todoCount = todoData.length - completedCount
-
     return (
       <section className="todoapp">
         <header className="header">
@@ -140,6 +175,8 @@ export default class App extends Component {
             onDeleted={this.deleteItem}
             onToggleCompleted={this.onToggleCompleted}
             onItemEditing={this.editingItem}
+            onToggleTimer={this.onToggleTimer}
+            onToggleEndTimer={this.onToggleEndTimer}
           />
           <Footer
             itemsLeft={todoCount}

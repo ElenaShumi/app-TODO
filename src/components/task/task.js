@@ -14,8 +14,6 @@ export default class Task extends Component {
   static propTypes = {
     todos: PropTypes.arrayOf(PropTypes.object),
     id: PropTypes.number,
-    minutes: PropTypes.number,
-    seconds: PropTypes.number,
     label: PropTypes.string,
     onDeleted: PropTypes.func.isRequired,
     onToggleCompleted: PropTypes.func.isRequired,
@@ -73,8 +71,13 @@ export default class Task extends Component {
   #interval
   startTimer = () => {
     clearInterval(this.#interval)
+
     const { minutes, seconds } = this.state
-    const end = Date.now() + minutes * 1000 * 60 + seconds * 1000
+    let end
+    if (!this.props.endTimer) {
+      end = Date.now() + minutes * 1000 * 60 + seconds * 1000
+    } else end = this.props.endTimer
+
     this.#interval = setInterval(() => {
       const now = Date.now()
       const delta = end - now
@@ -85,16 +88,21 @@ export default class Task extends Component {
       this.setState({
         minutes: Math.floor(delta / 1000 / 60),
         seconds: Math.floor((delta % 60000) / 1000),
+        endTimer: end,
       })
-    }, 500)
+    }, 1000)
   }
 
   pauseTimer = () => {
     clearInterval(this.#interval)
+    const { onToggleTimer, onToggleEndTimer, id } = this.props
+    onToggleTimer(id, false)
+    onToggleEndTimer(id, null)
   }
 
   componentWillUnmount() {
     clearInterval(this.#interval)
+    this.props.onToggleEndTimer(this.props.id, this.state.endTimer)
   }
 
   timeFormatting(time) {
@@ -104,23 +112,28 @@ export default class Task extends Component {
   }
 
   render() {
-    const { label, id, onDeleted, onToggleCompleted, completed, date } = this.props
+    const { label, id, timer, onDeleted, onToggleCompleted, completed, date, onToggleTimer } = this.props
+
     const { editing, minutes, seconds } = this.state
 
-    const inputCheckbox = completed ? (
-      <input className="toggle" type="checkbox" onClick={onToggleCompleted} id={`checkbox ${id}`} checked />
-    ) : (
-      <input className="toggle" type="checkbox" onClick={onToggleCompleted} id={`checkbox ${id}`} />
-    )
+    if (timer) {
+      this.startTimer()
+    }
 
     return (
       <li className={completed ? 'completed' : editing ? 'editing' : ''}>
         <div className="view">
-          {inputCheckbox}
+          <input
+            className="toggle"
+            type="checkbox"
+            onClick={onToggleCompleted}
+            id={`checkbox ${id}`}
+            defaultChecked={completed ? true : false}
+          />
           <label htmlFor={`checkbox ${id}`}>
             <span className="title"> {label} </span>
             <span className="description">
-              <button className="icon icon-play" onClick={this.startTimer}></button>
+              <button className="icon icon-play" onClick={() => onToggleTimer(id, true)}></button>
               <button className="icon icon-pause" onClick={this.pauseTimer}></button>
               {` ${this.timeFormatting(minutes)}:${this.timeFormatting(seconds)} `}
             </span>
