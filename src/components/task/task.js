@@ -90,7 +90,7 @@ export default class Task extends Component {
         seconds: Math.floor((delta % 60000) / 1000),
         endTimer: end,
       })
-    }, 1000)
+    }, 500)
   }
 
   pauseTimer = () => {
