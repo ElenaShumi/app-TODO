@@ -19,6 +19,8 @@ const Task = ({
   date,
   minutes: minutesProps,
   seconds: secondsProps,
+  initialTimer,
+  setInitialTimer,
 }) => {
   const [label, setLabel] = useState('')
   const [editing, setEditing] = useState(false)
@@ -117,6 +119,8 @@ const Task = ({
             onToggleTimer={onToggleTimer}
             toggleTime={toggleTime}
             id={id}
+            initialTimer={initialTimer}
+            setInitialTimer={setInitialTimer}
           />
           <span className="description">{`created ${formatDistanceToNow(date, { includeSeconds: true })}`}</span>
         </label>

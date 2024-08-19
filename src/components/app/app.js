@@ -10,6 +10,7 @@ import Footer from '../footer'
 export default function App() {
   const [todoData, setTodoDate] = useState([])
   const [filter, setFilter] = useState('all')
+  const [initialTimer, setInitialTimer] = useState([])
 
   const createTodoItem = (label, minutes, seconds) => {
     return {
@@ -122,6 +123,10 @@ export default function App() {
 
   const todoCount = todoData.length - completedCount
 
+  const toggleTimer = (newArr) => {
+    setInitialTimer(newArr)
+  }
+  console.log(initialTimer)
   return (
     <section className="todoapp">
       <header className="header">
@@ -136,6 +141,8 @@ export default function App() {
           onItemEditing={editingItem}
           onToggleTimer={onToggleTimer}
           toggleTime={toggleTime}
+          initialTimer={initialTimer}
+          setInitialTimer={toggleTimer}
         />
         <Footer
           itemsLeft={todoCount}
