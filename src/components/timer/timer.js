@@ -13,6 +13,7 @@ function Timer({ id, minutes, seconds, timerProps, onToggleTimer, initialTimer, 
       setInitTimer(time)
     } else {
       setStartAt()
+      console.log(initialTimer)
     }
   }, [])
 
@@ -25,8 +26,10 @@ function Timer({ id, minutes, seconds, timerProps, onToggleTimer, initialTimer, 
 
     const item = arr[idx]
 
-    const newTime = now - item.endTime
-    return newTime + item.time
+    if (timerProps) {
+      const newTime = now - item.endTime
+      return newTime + item.time
+    } else return item.time
   }
 
   const timeSeconds = minutes * 1000 * 60 + seconds * 1000
