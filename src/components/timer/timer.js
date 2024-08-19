@@ -1,20 +1,17 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react'
-// import PropTypes from 'prop-types'
+import React, { useState, useEffect, useLayoutEffect } from 'react'
+import PropTypes from 'prop-types'
 
 import './timer.css'
 
-function Timer({ id, minutesProps, secondsProps, timerProps, onToggleTimer, initialTimer, setInitialTimer }) {
+function Timer({ id, minutes, seconds, timerProps, onToggleTimer, initialTimer, setInitialTimer }) {
   const [startAt, setStartAt] = useState()
-  const [initialTimerM, setInitialTimerM] = useState(0)
+  const [initTimer, setInitTimer] = useState(0)
 
   useEffect(() => {
     if (initialTimer.length !== 0) {
-      console.log('ЕСТЬ')
       const time = timerSearch(initialTimer)
-      setInitialTimerM(time)
-      // console.log(now)
+      setInitTimer(time)
     } else {
-      console.log('Ничего нет')
       setStartAt()
     }
   }, [])
@@ -23,8 +20,6 @@ function Timer({ id, minutesProps, secondsProps, timerProps, onToggleTimer, init
     const idx = arr.findIndex((el) => el.id === id)
 
     if (idx === -1) {
-      // return setStartArr([...arr, { id, value }])
-      // console.log('NOOOOOOO')
       return 0
     }
 
@@ -34,20 +29,16 @@ function Timer({ id, minutesProps, secondsProps, timerProps, onToggleTimer, init
     return newTime + item.time
   }
 
-  const timeSeconds = minutesProps * 1000 * 60 + secondsProps * 1000
+  const timeSeconds = minutes * 1000 * 60 + seconds * 1000
 
   const now = useNow(100, startAt)
 
   const timeFromStart = now - (startAt ?? now)
 
-  const timer = timeFromStart + initialTimerM
-  // console.log(timer)
+  const timer = timeFromStart + initTimer
 
   useEffect(() => {
-    // console.log(timer)
     return () => {
-      // console.log(timer)
-      // console.log(newArr)
       const newArr = useNewArr(initialTimer, id, timer, now)
       setInitialTimer(newArr)
     }
@@ -58,10 +49,9 @@ function Timer({ id, minutesProps, secondsProps, timerProps, onToggleTimer, init
   const minutesString = String(Math.floor(countDown / 1000 / 60)).padStart(2, '0')
   const secondsString = String(Math.floor((countDown % 60000) / 1000)).padStart(2, '0')
 
-  const toggleTimerNoow = (value) => {
+  const toggleTimer = (value) => {
     if (value === 'pause') {
-      // console.log(timer)
-      setInitialTimerM(timer)
+      setInitTimer(timer)
       onToggleTimer(id, false)
       setStartAt()
     } else if (value === 'play') {
@@ -71,22 +61,20 @@ function Timer({ id, minutesProps, secondsProps, timerProps, onToggleTimer, init
   }
 
   useEffect(() => {
-    // console.log(minutesProps + ':' + secondsProps)
     if (timerProps) {
-      toggleTimerNoow('play')
+      toggleTimer('play')
     }
-
-    // return () => saveTime(minutesString, secondsString)
   }, [])
 
   const isCountEnd = countDown === 0
   useEffect(() => {
     clearInterval()
   }, [isCountEnd])
+
   return (
     <span className="description">
-      <button className="icon icon-play" onClick={() => toggleTimerNoow('play')}></button>
-      <button className="icon icon-pause" onClick={() => toggleTimerNoow('pause')}></button>
+      <button className="icon icon-play" onClick={() => toggleTimer('play')}></button>
+      <button className="icon icon-pause" onClick={() => toggleTimer('pause')}></button>
       {` ${minutesString}:${secondsString} `}
     </span>
   )
@@ -94,9 +82,7 @@ function Timer({ id, minutesProps, secondsProps, timerProps, onToggleTimer, init
 
 export default Timer
 
-function useNow(updateInterval, enabled, cb) {
-  const cbRef = useRef(cb)
-  cbRef.current = cb
+function useNow(updateInterval, enabled) {
   const [now, setNow] = useState(Date.now())
 
   useLayoutEffect(() => {
@@ -105,18 +91,15 @@ function useNow(updateInterval, enabled, cb) {
     }
 
     setNow(Date.now())
-    cbRef.current?.(Date.now())
 
     const interval = setInterval(() => {
       setNow(Date.now())
-      cbRef.current?.(Date.now())
     }, updateInterval)
 
     return () => {
       clearInterval(interval)
     }
   }, [updateInterval, enabled])
-  // console.log(now)
   return now
 }
 
@@ -130,4 +113,18 @@ function useNewArr(arr, id, time, endTime) {
   const oldItem = arr[idx]
   const newItem = { ...oldItem, time: time, endTime: endTime }
   return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)]
+}
+
+Timer.defaultProps = {
+  initialTimer: [],
+  minutes: 0,
+  seconds: 0,
+}
+
+Timer.propTypes = {
+  initialTimer: PropTypes.arrayOf(PropTypes.object),
+  id: PropTypes.string,
+  timerProps: PropTypes.bool,
+  onToggleTimer: PropTypes.func,
+  setInitialTimer: PropTypes.func,
 }

@@ -18,7 +18,6 @@ export default function App() {
       minutes,
       seconds,
       timer: false,
-      endTimer: null,
       completed: false,
       date: new Date(),
       id: self.crypto.randomUUID(),
@@ -52,15 +51,6 @@ export default function App() {
     setTodoDate(toggleProperty(todoData, id, 'completed'))
   }
 
-  const toggleTime = (id, timeMeasures, value) => {
-    const idx = todoData.findIndex((el) => el.id === id)
-    console.log(value)
-    const oldItem = todoData[idx]
-    const newItem = { ...oldItem, [timeMeasures]: value }
-
-    return setTodoDate([...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)])
-  }
-
   const onToggleTimer = (id, value) => {
     const idx = todoData.findIndex((el) => el.id === id)
 
@@ -70,22 +60,9 @@ export default function App() {
     return setTodoDate([...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)])
   }
 
-  // toggleEndTimer(arr, id, value) {
-  //   const idx = arr.findIndex((el) => el.id === id)
-
-  //   const oldItem = arr[idx]
-  //   const newItem = { ...oldItem, ['endTimer']: value }
-
-  //   return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)]
-  // }
-
-  // onToggleEndTimer = (id, value) => {
-  //   this.setState(({ todoData }) => {
-  //     return {
-  //       todoData: this.toggleEndTimer(todoData, id, value),
-  //     }
-  //   })
-  // }
+  const toggleTimer = (newArr) => {
+    setInitialTimer(newArr)
+  }
 
   const toggleFilter = (items, filter) => {
     switch (filter) {
@@ -123,10 +100,6 @@ export default function App() {
 
   const todoCount = todoData.length - completedCount
 
-  const toggleTimer = (newArr) => {
-    setInitialTimer(newArr)
-  }
-  console.log(initialTimer)
   return (
     <section className="todoapp">
       <header className="header">
@@ -140,7 +113,6 @@ export default function App() {
           onToggleCompleted={onToggleCompleted}
           onItemEditing={editingItem}
           onToggleTimer={onToggleTimer}
-          toggleTime={toggleTime}
           initialTimer={initialTimer}
           setInitialTimer={toggleTimer}
         />

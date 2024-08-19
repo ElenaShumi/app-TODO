@@ -8,8 +8,6 @@ import Timer from '../timer'
 const Task = ({
   id,
   onItemEditing,
-  // endTimer,
-  toggleTime,
   label: labelProps,
   timer,
   onDeleted,
@@ -17,26 +15,17 @@ const Task = ({
   onToggleTimer,
   completed,
   date,
-  minutes: minutesProps,
-  seconds: secondsProps,
+  minutes,
+  seconds,
   initialTimer,
   setInitialTimer,
 }) => {
   const [label, setLabel] = useState('')
   const [editing, setEditing] = useState(false)
-  // const [minutes, setMinutes] = useState(null)
-  // const [seconds, setSeconds] = useState(null)
-  // // const [endTimerState, setEndTimerState] = useState(null)
-
-  // let interval
 
   const onLabelChange = (e) => {
     setLabel(e.target.value)
   }
-
-  // useEffect(() => {
-  //   onTime(minutesProps, secondsProps)
-  // }, [])
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -51,55 +40,6 @@ const Task = ({
     setLabel(labelProps)
   }
 
-  // const onTime = (minutes, seconds) => {
-  //   setMinutes(minutes)
-  //   setSeconds(seconds)
-  // }
-
-  // const startTimer = () => {
-  //   clearInterval(interval)
-
-  //   let end
-  //   if (!endTimer) {
-  //     end = Date.now() + minutes * 1000 * 60 + seconds * 1000
-  //   } else end = endTimer
-
-  //   interval = setInterval(() => {
-  //     const now = Date.now()
-  //     const delta = end - now
-  //     if (delta < 0) {
-  //       clearInterval(interval)
-  //       return
-  //     }
-  //     setMinutes(Math.floor(delta / 1000 / 60))
-  //     setSeconds(Math.floor((delta % 60000) / 1000))
-  //     // setEndTimerState(end)
-  //   }, 500)
-  // }
-
-  // const pauseTimer = () => {
-  //   clearInterval(interval)
-  //   onToggleTimer(id, false)
-  //   onToggleEndTimer(id, null)
-  // }
-
-  // useEffect(() => {
-  //   return () => {
-  //     clearInterval(interval)
-  //     onToggleEndTimer(id, endTimerState)
-  //   }
-  // }, [])
-
-  // const timeFormatting = (time) => {
-  //   if (!time) return '00'
-  //   else if (time < 10) return `0${time}`
-  //   else return time
-  // }
-
-  // if (timer) {
-  //   startTimer()
-  // }
-
   return (
     <li className={completed ? 'completed' : editing ? 'editing' : ''}>
       <div className="view">
@@ -113,11 +53,10 @@ const Task = ({
         <label htmlFor={`checkbox ${id}`}>
           <span className="title"> {labelProps} </span>
           <Timer
-            minutesProps={minutesProps}
-            secondsProps={secondsProps}
+            minutes={minutes}
+            seconds={seconds}
             timerProps={timer}
             onToggleTimer={onToggleTimer}
-            toggleTime={toggleTime}
             id={id}
             initialTimer={initialTimer}
             setInitialTimer={setInitialTimer}

@@ -10,7 +10,6 @@ const TaskList = ({
   onToggleCompleted,
   onItemEditing,
   onToggleTimer,
-  toggleTime,
   initialTimer,
   setInitialTimer,
 }) => {
@@ -25,7 +24,6 @@ const TaskList = ({
         onToggleCompleted={() => onToggleCompleted(id)}
         onToggleTimer={onToggleTimer}
         onItemEditing={onItemEditing}
-        toggleTime={toggleTime}
         initialTimer={initialTimer}
         setInitialTimer={setInitialTimer}
       />
