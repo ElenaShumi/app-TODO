@@ -13,7 +13,6 @@ function Timer({ id, minutes, seconds, timerProps, onToggleTimer, initialTimer, 
       setInitTimer(time)
     } else {
       setStartAt()
-      console.log(initialTimer)
     }
   }, [])
 
